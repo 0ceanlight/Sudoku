@@ -1,5 +1,8 @@
+__author__ = "Oceanlight"
+
 # y down, x across
 # y, x pairs
+# zeroes represent empty spaces
 grid = [
 	[0, 0, 0,  0, 0, 0,  7, 2, 0],
 	[0, 8, 9,  0, 0, 1,  0, 0, 0],
@@ -12,14 +15,42 @@ grid = [
 	[0, 0, 0,  0, 0, 0,  0, 0, 4],
 	[0, 7, 1,  0, 0, 0,  0, 0, 5],
 	[0, 0, 0,  5, 1, 0,  0, 0, 0],
-	]
-
+]
 
 
 def main():
+	if input("Press enter to continue; press any other key to run the demo puzzle.\n") == "":
+		print("Enter the 9 rows of your puzzle.\n - Put 9 numbers on every row, separating them with spaces.\n - Use a 0 for every empty space.")
+		# get every row of puzzle
+		for i in range(len(grid)):
+			print(f"row {i + 1}:")
+			# ensure that user enters rows with appropriate length
+			while(True):
+				grid[i] = getIntArray()
+				if len(grid[i]) == len(grid):
+					break
+	print()
 	printGrid()
 	solveGrid()
 	printGrid()
+
+
+# map array of space separated strings to array of ints
+# if invalid input, recurse to eet input again
+def getIntArray():
+	try:
+		newRow = input().split()
+		newRowInt = list(map(int, newRow))
+		# ensure that user is imputing valid sudoku numbers
+		for i in newRowInt:
+			if i > 9 or i < 0:
+				print("enter integers from 0 to 9")
+				return getIntArray()
+
+		return newRowInt
+	except:
+		return getIntArray()
+
 
 def solveGrid():
 	find = find_empty()
@@ -43,8 +74,7 @@ def solveGrid():
 	return False
 
 
-
-# iterate through grid and retun first empty pos  (y, x)
+# iterate through grid and retun first empty position
 def find_empty():
     for y in range(9):
         for x in range(9):
@@ -63,7 +93,7 @@ def isPossible(y, x, n):
 	for i in range(9):
 		if grid[i][x] == n:
 			return False
-	# check um "current box" lol
+	# check "current box"
 	boxY = y - y % 3
 	boxX = x - x % 3
 	for i in range(boxY, boxY + 3):
@@ -79,3 +109,4 @@ def printGrid():
 	print()
 
 main()
+
